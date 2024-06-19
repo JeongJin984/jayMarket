@@ -1,6 +1,6 @@
 package com.jay.membership.application.port.in;
 
-import com.jay.membership.common.SelfValidating;
+import com.jay.common.SelfValidating;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

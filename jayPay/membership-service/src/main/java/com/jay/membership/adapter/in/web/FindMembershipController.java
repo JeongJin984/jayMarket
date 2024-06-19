@@ -2,8 +2,7 @@ package com.jay.membership.adapter.in.web;
 
 import com.jay.membership.application.port.in.FindMembershipCommand;
 import com.jay.membership.application.port.in.FindMembershipUseCase;
-import com.jay.membership.common.WebAdapter;
-import com.jay.membership.domain.Membership;
+import com.jay.common.WebAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

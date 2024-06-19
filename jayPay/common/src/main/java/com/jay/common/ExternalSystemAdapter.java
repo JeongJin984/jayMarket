@@ -1,4 +1,4 @@
-package com.jay.membership.common;
+package com.jay.common;
 
 import org.springframework.stereotype.Component;
 
@@ -8,5 +8,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Component
-public @interface UseCase {
+public @interface ExternalSystemAdapter {
 }

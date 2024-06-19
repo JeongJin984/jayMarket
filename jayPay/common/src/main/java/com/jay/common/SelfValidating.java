@@ -1,4 +1,4 @@
-package com.jay.membership.common;
+package com.jay.common;
 
 import jakarta.validation.*;
 import lombok.extern.slf4j.Slf4j;

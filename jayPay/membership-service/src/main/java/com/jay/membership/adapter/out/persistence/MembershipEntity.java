@@ -3,7 +3,6 @@ package com.jay.membership.adapter.out.persistence;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Generated;
 import lombok.NoArgsConstructor;
 
 @Entity

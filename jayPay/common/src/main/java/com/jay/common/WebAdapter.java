@@ -1,4 +1,4 @@
-package com.jay.membership.common;
+package com.jay.common;
 
 import org.springframework.stereotype.Component;
 
