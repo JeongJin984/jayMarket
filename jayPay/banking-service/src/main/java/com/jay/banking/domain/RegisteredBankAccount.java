@@ -4,13 +4,14 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class RegisteredBankAccount {
-    @Getter private final String registeredBankAccountId;
-    @Getter private final String membershipId;
-    @Getter private final String bankName;
-    @Getter private final String bankAccountNumber;
-    @Getter private final Boolean linkedStatusIsValid;
+    private final String registeredBankAccountId;
+    private final String membershipId;
+    private final String bankName;
+    private final String bankAccountNumber;
+    private final Boolean linkedStatusIsValid;
 
     public static RegisteredBankAccount generateBankAccount(
             RegisteredBankAccountId registeredBankAccountId,
