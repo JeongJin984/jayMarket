@@ -1,6 +1,6 @@
 package com.jay.banking.adapter.in.web;
 
-public record FirmbankingRequest(
+public record FirmbankingWebRequest(
         String fromBankName,
         String fromBankAccountNumber,
         String toBankName,

@@ -12,8 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -29,7 +27,7 @@ public class RegisterBankAccountControllerTest {
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/banking/account/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsBytes(new RegisterBankAccountRequest("1", "우리은행", "111122222",  true)))
+                        .content(mapper.writeValueAsBytes(new RegisterBankAccountWebRequest("1", "우리은행", "111122222",  true)))
         ).andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

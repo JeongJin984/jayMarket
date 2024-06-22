@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 @WebAdapter
 @RestController
 @RequiredArgsConstructor
-public class FirmbankingRequestController {
+public class FirmbankingController {
 
     private final FirmbankingUseCase firmBankingUseCase;
 
     @PostMapping("/banking/firmbanking/request")
-
+    public void
 }

@@ -17,7 +17,7 @@ public class RegisterBankAccountController {
 
     @PostMapping("/banking/account/register")
     RegisteredBankAccount registeredBankAccount(
-            @RequestBody final RegisterBankAccountRequest body
+            @RequestBody final RegisterBankAccountWebRequest body
     ) {
         RegisterBankAccountCommand command = RegisterBankAccountCommand.builder()
                 .membershipId(body.membershipId())

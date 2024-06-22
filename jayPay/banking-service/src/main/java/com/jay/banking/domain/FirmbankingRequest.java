@@ -6,6 +6,9 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.math.BigDecimal;
+import java.util.UUID;
+
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class FirmbankingRequest {
@@ -14,18 +17,20 @@ public class FirmbankingRequest {
     private final String fromBankAccountNumber;
     private final String toBankName;
     private final String toBankAccountNumber;
-    private final String moneyAmount;
+    private final BigDecimal moneyAmount;
     @Enumerated(EnumType.STRING)
     private final FirmbankingRequestStatus firmbankingStatus;
+    private final UUID uuid;
 
-    public static FirmbankingRequest generateBankAccount(
+    public static FirmbankingRequest generateFirmbankingRequest(
             FirmbankingRequestId firmbankingRequestId,
             FromBankName fromBankName,
             FromBankAccountNumber fromBankAccountNumber,
             ToBankName toBankName,
             ToBankAccountNumber toBankAccountNumber,
             MoneyAmount moneyAmount,
-            FirmbankingRequestStatus firmbankingRequestStatus
+            FirmbankingRequestStatus firmbankingRequestStatus,
+            UUID uuid
     ) {
         return new FirmbankingRequest(
                 firmbankingRequestId.firmbankingRequestId(),
@@ -34,7 +39,8 @@ public class FirmbankingRequest {
                 toBankName.toBankName(),
                 toBankAccountNumber.toBankAccountNumber(),
                 moneyAmount.moneyAmount(),
-                firmbankingRequestStatus
+                firmbankingRequestStatus,
+                uuid
         );
     }
 
@@ -43,7 +49,7 @@ public class FirmbankingRequest {
     public record FromBankAccountNumber(String fromBankAccountNumber) {}
     public record ToBankName(String toBankName) {}
     public record ToBankAccountNumber(String toBankAccountNumber) {}
-    public record MoneyAmount(String moneyAmount) {}
+    public record MoneyAmount(BigDecimal moneyAmount) {}
 
     public enum FirmbankingRequestStatus {
         REQUEST, COMPLETED, FAIL

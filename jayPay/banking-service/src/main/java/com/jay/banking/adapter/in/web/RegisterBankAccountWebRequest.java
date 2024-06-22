@@ -1,6 +1,6 @@
 package com.jay.banking.adapter.in.web;
 
-public record RegisterBankAccountRequest(
+public record RegisterBankAccountWebRequest(
         String membershipId,
         String bankName,
         String bankAccountNumber,
