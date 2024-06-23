@@ -1,4 +1,9 @@
 package com.jay.money.adaptor.in.web;
 
-public class ChargeMoneyWebRequest {
+import jakarta.validation.constraints.NotNull;
+
+public record ChargeMoneyWebRequest(
+        @NotNull String targetMembershipId,
+        @NotNull String amount
+) {
 }
