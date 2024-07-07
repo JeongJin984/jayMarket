@@ -21,6 +21,7 @@ public class FirmbankingRequest {
     @Enumerated(EnumType.STRING)
     private final FirmbankingRequestStatus firmbankingStatus;
     private final UUID uuid;
+    private final String aggregateIdentifier;
 
     public static FirmbankingRequest generateFirmbankingRequest(
             FirmbankingRequestId firmbankingRequestId,
@@ -30,7 +31,8 @@ public class FirmbankingRequest {
             ToBankAccountNumber toBankAccountNumber,
             MoneyAmount moneyAmount,
             FirmbankingRequestStatus firmbankingRequestStatus,
-            UUID uuid
+            UUID uuid,
+            AggregateIdentifier aggregateIdentifier
     ) {
         return new FirmbankingRequest(
                 firmbankingRequestId.firmbankingRequestId(),
@@ -40,7 +42,8 @@ public class FirmbankingRequest {
                 toBankAccountNumber.toBankAccountNumber(),
                 moneyAmount.moneyAmount(),
                 firmbankingRequestStatus,
-                uuid
+                uuid,
+                aggregateIdentifier.aggregateIdentifier
         );
     }
 
@@ -50,6 +53,7 @@ public class FirmbankingRequest {
     public record ToBankName(String toBankName) {}
     public record ToBankAccountNumber(String toBankAccountNumber) {}
     public record MoneyAmount(BigDecimal moneyAmount) {}
+    public record AggregateIdentifier(String aggregateIdentifier) {}
 
     public enum FirmbankingRequestStatus {
         REQUEST, COMPLETED, FAIL

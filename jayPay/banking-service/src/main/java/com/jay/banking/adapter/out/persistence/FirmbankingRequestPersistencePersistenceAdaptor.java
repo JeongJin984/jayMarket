@@ -13,7 +13,7 @@ public class FirmbankingRequestPersistencePersistenceAdaptor implements Firmbank
     private final FirmbankingRequestRepository firmbankingRequestRepository;
 
     @Override
-    public FirmbankingRequestEntity createFirmbankingRequest(FirmbankingRequest.FromBankName fromBankName, FirmbankingRequest.FromBankAccountNumber fromBankAccountNumber, FirmbankingRequest.ToBankName toBankName, FirmbankingRequest.ToBankAccountNumber toBankAccountNumber, FirmbankingRequest.MoneyAmount moneyAmount, FirmbankingRequest.FirmbankingRequestStatus firmbankingRequestStatus) {
+    public FirmbankingRequestEntity createFirmbankingRequest(FirmbankingRequest.FromBankName fromBankName, FirmbankingRequest.FromBankAccountNumber fromBankAccountNumber, FirmbankingRequest.ToBankName toBankName, FirmbankingRequest.ToBankAccountNumber toBankAccountNumber, FirmbankingRequest.MoneyAmount moneyAmount, FirmbankingRequest.FirmbankingRequestStatus firmbankingRequestStatus, FirmbankingRequest.AggregateIdentifier aggregateIdentifier) {
         return firmbankingRequestRepository.save(
                 new FirmbankingRequestEntity(
                         fromBankName.fromBankName(),
@@ -21,7 +21,8 @@ public class FirmbankingRequestPersistencePersistenceAdaptor implements Firmbank
                         toBankName.toBankName(),
                         toBankAccountNumber.toBankAccountNumber(),
                         moneyAmount.moneyAmount(),
-                        firmbankingRequestStatus
+                        firmbankingRequestStatus,
+                        aggregateIdentifier.aggregateIdentifier()
                 )
         );
     }

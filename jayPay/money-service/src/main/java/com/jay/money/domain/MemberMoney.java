@@ -28,6 +28,6 @@ public class MemberMoney {
     public record MemberMoneyId(Long memberMoneyId) {}
     public record MembershipId(Long membershipId) {}
     public record MemberBalance(BigDecimal balance) {}
-
+    public record MemberMoneyAggregateIdentifier(String aggregateIdentifier) {}
 
 }

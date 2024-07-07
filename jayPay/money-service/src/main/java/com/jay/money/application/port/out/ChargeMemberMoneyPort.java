@@ -7,7 +7,7 @@ import com.jay.money.domain.MemberMoney;
 
 import java.math.BigDecimal;
 
-public interface ChargeMoneyPort {
+public interface ChargeMemberMoneyPort {
     MemberMoneyWebRequestEntity createChargeMoneyRequest(
             ChargeMoneyRequest.TargetMembershipId targetMembershipId,
             ChargeMoneyRequest.ActionType actionType,

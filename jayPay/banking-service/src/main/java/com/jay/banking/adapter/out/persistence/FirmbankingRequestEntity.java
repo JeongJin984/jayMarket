@@ -23,14 +23,16 @@ public class FirmbankingRequestEntity {
     private BigDecimal moneyAmount;
     @Setter
     private FirmbankingRequest.FirmbankingRequestStatus firmbankingRequestStatus;
+    private String aggregateIdentifier;
 
-    public FirmbankingRequestEntity(String fromBankName, String fromBankAccountNumber, String toBankName, String toBankAccountNumber, BigDecimal moneyAmount, FirmbankingRequest.FirmbankingRequestStatus firmbankingRequestStatus) {
+    public FirmbankingRequestEntity(String fromBankName, String fromBankAccountNumber, String toBankName, String toBankAccountNumber, BigDecimal moneyAmount, FirmbankingRequest.FirmbankingRequestStatus firmbankingRequestStatus, String aggregateIdentifier) {
         this.fromBankName = fromBankName;
         this.fromBankAccountNumber = fromBankAccountNumber;
         this.toBankName = toBankName;
         this.toBankAccountNumber = toBankAccountNumber;
         this.moneyAmount = moneyAmount;
         this.firmbankingRequestStatus = firmbankingRequestStatus;
+        this.aggregateIdentifier = aggregateIdentifier;
     }
 
 }

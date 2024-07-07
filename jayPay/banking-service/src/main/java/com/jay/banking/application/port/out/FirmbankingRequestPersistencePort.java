@@ -10,6 +10,7 @@ public interface FirmbankingRequestPersistencePort {
             FirmbankingRequest.ToBankName toBankName,
             FirmbankingRequest.ToBankAccountNumber toBankAccountNumber,
             FirmbankingRequest.MoneyAmount moneyAmount,
-            FirmbankingRequest.FirmbankingRequestStatus firmbankingRequestStatus
+            FirmbankingRequest.FirmbankingRequestStatus firmbankingRequestStatus,
+            FirmbankingRequest.AggregateIdentifier aggregateIdentifier
     );
 }

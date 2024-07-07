@@ -4,4 +4,5 @@ import com.jay.money.domain.ChargeMoneyRequest;
 
 public interface ChargeMoneyUseCase {
     ChargeMoneyRequest charge(ChargeMoneyCommand command);
+    void chargeMemberMoneyRequestByEvent(ChargeMoneyCommand command);
 }

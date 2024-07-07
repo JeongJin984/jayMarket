@@ -1,7 +1,20 @@
 version: '3'
 services:
+  axon-server:
+    container_name: axon-server
+    image: axoniq/axonserver:4.6.3-jdk-11-dev
+    networks:
+      - jaypay_network
+    ports:
+      - "8024:8024"
+      - "8124:8124"
+    volumes:
+      - axonserver-data:/axonserver/data
+      - axonserver-events:/axonserver/events
+      - axonserver-config:/axonserver/config:ro
+
   mysql:
-    image: mysql:8.0
+    image: mysql
     networks:
       - jaypay_network
     volumes:
@@ -26,15 +39,106 @@ services:
     depends_on:
       - mysql
     environment:
-#      - AXON_AXONSERVER_SERVERS=axon-server:8124
-#      - AXON_SERIALIZER_EVENTS=jackson
-#      - AXON_SERIALIZER_MESSAGES=jackson
-#      - AXON_SERIALIZER_GENERAL=xstream
+      - AXON_AXONSERVER_SERVERS=axon-server:8124
+      - AXON_SERIALIZER_EVENTS=jackson
+      - AXON_SERIALIZER_MESSAGES=jackson
+      - AXON_SERIALIZER_GENERAL=xstream
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/jay_pay
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=admin
       - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQLDialect
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+      - SERVICE_MEMBERSHIP_URL=http://membership-service:8080
+      - SERVICE_BANKING_URL=http://money-service:8080
+      - SERVICE_MONEY_URL=http://money-service:8080
+      - SERVICE_REMITTANCE_URL=http://remittance-service:8080
+  banking-service:
+    image: jaypay-banking-service:1.0.0
+    networks:
+      - jaypay_network
+    ports:
+      - "8082:8080"
+    depends_on:
+      - mysql
+    environment:
+      - AXON_AXONSERVER_SERVERS=axon-server:8124
+      - AXON_SERIALIZER_EVENTS=jackson
+      - AXON_SERIALIZER_MESSAGES=jackson
+      - AXON_SERIALIZER_GENERAL=xstream
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/jay_pay
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQLDialect
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+      - SERVICE_MEMBERSHIP_URL=http://membership-service:8080
+      - SERVICE_BANKING_URL=http://money-service:8080
+      - SERVICE_MONEY_URL=http://money-service:8080
+      - SERVICE_REMITTANCE_URL=http://remittance-service:8080
+  money-service:
+    image: jaypay-money-service:1.0.0
+    networks:
+      - jaypay_network
+    ports:
+      - "8083:8080"
+    depends_on:
+      - mysql
+    environment:
+      - AXON_AXONSERVER_SERVERS=axon-server:8124
+      - AXON_SERIALIZER_EVENTS=jackson
+      - AXON_SERIALIZER_MESSAGES=jackson
+      - AXON_SERIALIZER_GENERAL=xstream
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/jay_pay
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQLDialect
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+      - SERVICE_MEMBERSHIP_URL=http://membership-service:8080
+      - SERVICE_BANKING_URL=http://money-service:8080
+      - SERVICE_MONEY_URL=http://money-service:8080
+      - SERVICE_REMITTANCE_URL=http://remittance-service:8080
+
+  remittance-service:
+    image: jaypay-remittance-service:1.0.0
+    networks:
+      - jaypay_network
+    ports:
+      - "8084:8080"
+    depends_on:
+      - mysql
+    environment:
+      - AXON_AXONSERVER_SERVERS=axon-server:8124
+      - AXON_SERIALIZER_EVENTS=jackson
+      - AXON_SERIALIZER_MESSAGES=jackson
+      - AXON_SERIALIZER_GENERAL=xstream
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/jay_pay
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQLDialect
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+      - SERVICE_MEMBERSHIP_URL=http://membership-service:8080
+      - SERVICE_BANKING_URL=http://money-service:8080
+      - SERVICE_MONEY_URL=http://money-service:8080
+      - SERVICE_REMITTANCE_URL=http://remittance-service:8080
+
+volumes:
+  axonserver-data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./axon-server-se/data
+  axonserver-events:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./axon-server-se/events
+  axonserver-config:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./axon-server-se/config
 networks:
   jaypay_network:
     driver: bridge
