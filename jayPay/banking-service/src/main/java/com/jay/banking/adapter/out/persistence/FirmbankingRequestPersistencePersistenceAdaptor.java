@@ -6,6 +6,8 @@ import com.jay.common.PersistenceAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @PersistenceAdapter
 @RequiredArgsConstructor
@@ -26,4 +28,13 @@ public class FirmbankingRequestPersistencePersistenceAdaptor implements Firmbank
                 )
         );
     }
+
+    @Override
+    public FirmbankingRequestEntity getFirmbankingRequest(FirmbankingRequest.AggregateIdentifier aggregateIdentifier) {
+        Optional<FirmbankingRequestEntity> opEntity = firmbankingRequestRepository.findByAggregateIdentifier(aggregateIdentifier.aggregateIdentifier());
+        opEntity.orElseThrow(() -> new RuntimeException("No Firmbanking request found"));
+        return opEntity.get();
+    }
+
+
 }

@@ -1,12 +1,15 @@
 package com.jay.banking.application.service;
 
 import com.jay.banking.adapter.axon.command.FirmbankingRequestAxonCommand;
+import com.jay.banking.adapter.axon.command.UpdateFirmbankingStatusAxonCommand;
 import com.jay.banking.adapter.out.external.FirmbankingServiceRequest;
 import com.jay.banking.adapter.out.external.FirmbankingServiceResponse;
 import com.jay.banking.adapter.out.persistence.FirmBankingRequestMapper;
 import com.jay.banking.adapter.out.persistence.FirmbankingRequestEntity;
 import com.jay.banking.application.port.in.FirmbankingRequestCommand;
 import com.jay.banking.application.port.in.FirmbankingRequestUseCase;
+import com.jay.banking.application.port.in.UpdateFirmbankingStatusCommand;
+import com.jay.banking.application.port.in.UpdateFirmbankingStatusUseCase;
 import com.jay.banking.application.port.out.FirmbankingServicePort;
 import com.jay.banking.application.port.out.FirmbankingRequestPersistencePort;
 import com.jay.banking.domain.FirmbankingRequest;
@@ -22,14 +25,14 @@ import java.util.UUID;
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
-public class FirmbankingRequestService implements FirmbankingRequestUseCase {
+public class FirmbankingRequestService implements FirmbankingRequestUseCase, UpdateFirmbankingStatusUseCase {
     private final FirmBankingRequestMapper mapper;
     private final FirmbankingRequestPersistencePort firmbankingRequestPersistencePort;
     private final FirmbankingServicePort firmbankingServicePort;
     private final CommandGateway commandGateway;
 
     @Override
-    public FirmbankingRequest requestFirmbanking(FirmbankingRequestCommand command) {
+    public FirmbankingRequest requestFirmbankingCheckAccount(FirmbankingRequestCommand command) {
         FirmbankingRequestEntity firmbankingRequest = firmbankingRequestPersistencePort.createFirmbankingRequest(
                 new FirmbankingRequest.FromBankName(command.getFromBankName()),
                 new FirmbankingRequest.FromBankAccountNumber(command.getFromAccountNumber()),
@@ -56,7 +59,7 @@ public class FirmbankingRequestService implements FirmbankingRequestUseCase {
     }
 
     @Override
-    public void requestFirmbankingByEvent(FirmbankingRequestCommand command) {
+    public void requestFirmbankingCheckAccountByEvent(FirmbankingRequestCommand command) {
         FirmbankingRequestAxonCommand axonCommand = FirmbankingRequestAxonCommand.builder()
                 .toBankName(command.getToBankName())
                 .toBankAccountNumber(command.getToAccountNumber())
@@ -97,5 +100,18 @@ public class FirmbankingRequestService implements FirmbankingRequestUseCase {
                     }
                 }
         );
+    }
+
+    @Override
+    public void updateFirmbankingStatusByEvent(UpdateFirmbankingStatusCommand command) {
+        UpdateFirmbankingStatusAxonCommand axonCommand = new UpdateFirmbankingStatusAxonCommand(command.getFirmbankingAggregateId(), command.getFirmbankingStatus());
+        commandGateway.send(axonCommand).whenComplete((response, ex) -> {
+            if(ex != null) {
+                log.error("error occurred when updating firmbanking status", ex);
+            } else {
+                FirmbankingRequestEntity firmbankingRequest = firmbankingRequestPersistencePort.getFirmbankingRequest(new FirmbankingRequest.AggregateIdentifier(command.getFirmbankingAggregateId()));
+                firmbankingRequest.setFirmbankingRequestStatus(FirmbankingRequest.FirmbankingRequestStatus.findByNum(command.getFirmbankingStatus()));
+            }
+        })
     }
 }

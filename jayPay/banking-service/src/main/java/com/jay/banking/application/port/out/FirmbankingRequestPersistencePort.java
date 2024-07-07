@@ -13,4 +13,8 @@ public interface FirmbankingRequestPersistencePort {
             FirmbankingRequest.FirmbankingRequestStatus firmbankingRequestStatus,
             FirmbankingRequest.AggregateIdentifier aggregateIdentifier
     );
+
+    FirmbankingRequestEntity getFirmbankingRequest(
+            FirmbankingRequest.AggregateIdentifier aggregateIdentifier
+    );
 }

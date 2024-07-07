@@ -1,7 +1,11 @@
 package com.jay.banking.adapter.in.web;
 
+import com.jay.banking.adapter.axon.command.UpdateFirmbankingStatusRequest;
 import com.jay.banking.application.port.in.FirmbankingRequestCommand;
 import com.jay.banking.application.port.in.FirmbankingRequestUseCase;
+import com.jay.banking.application.port.in.UpdateFirmbankingStatusCommand;
+import com.jay.banking.application.port.in.UpdateFirmbankingStatusUseCase;
+import com.jay.banking.domain.FirmbankingRequest;
 import com.jay.common.WebAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,12 +20,13 @@ import java.math.BigDecimal;
 public class FirmbankingController {
 
     private final FirmbankingRequestUseCase firmBankingRequestUseCase;
+    private final UpdateFirmbankingStatusUseCase updateFirmbankingStatusUseCase;
 
     @PostMapping("/banking/firmbanking/request")
     public void send(
             @RequestBody FirmbankingWebRequest webRequest
     ) {
-        firmBankingRequestUseCase.requestFirmbanking(new FirmbankingRequestCommand(
+        FirmbankingRequest firmbankingRequest = firmBankingRequestUseCase.requestFirmbankingCheckAccount(new FirmbankingRequestCommand(
                 webRequest.fromBankName(),
                 webRequest.fromBankAccountNumber(),
                 webRequest.toBankName(),
@@ -34,12 +39,23 @@ public class FirmbankingController {
     public void sendByEvent(
             @RequestBody FirmbankingWebRequest webRequest
     ) {
-        firmBankingRequestUseCase.requestFirmbankingByEvent(new FirmbankingRequestCommand(
+        firmBankingRequestUseCase.requestFirmbankingCheckAccountByEvent(new FirmbankingRequestCommand(
                 webRequest.fromBankName(),
                 webRequest.fromBankAccountNumber(),
                 webRequest.toBankName(),
                 webRequest.toBankAccountNumber(),
                 new BigDecimal(webRequest.moneyAmount())
         ));
+    }
+
+    @PostMapping("/banking/firmbanking/update-eda")
+    public void updateFirmbankingStatusByEvent(
+            @RequestBody UpdateFirmbankingStatusRequest request
+            ) {
+        UpdateFirmbankingStatusCommand command = UpdateFirmbankingStatusCommand.builder()
+                .firmbankingAggregateId(request.getFirmbankingAggregateIdentifier())
+                .firmbankingStatus(request.getStatus())
+                .build();
+        updateFirmbankingStatusUseCase.updateFirmbankingStatusByEvent(command);
     }
 }

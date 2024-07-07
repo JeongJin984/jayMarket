@@ -1,7 +1,9 @@
 package com.jay.banking.adapter.axon.aggregate;
 
 import com.jay.banking.adapter.axon.command.FirmbankingRequestAxonCommand;
+import com.jay.banking.adapter.axon.command.UpdateFirmbankingStatusAxonCommand;
 import com.jay.banking.adapter.axon.event.FirmbankingRequestEvent;
+import com.jay.banking.adapter.axon.event.UpdateFirmbankingStatusEvent;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.axonframework.commandhandling.CommandHandler;
@@ -51,5 +53,17 @@ public class FirmbankingRequestAggregate {
         toBankAccountNumber = event. getToBankAccountNumber();
         moneyAmount = event. getMoneyAmount();
         firmbankingStatus = event. getFirmbankingStatus();
+    }
+
+    @CommandHandler
+    public String handle(UpdateFirmbankingStatusAxonCommand command) {
+        id = command.getAggregateIdentifier();
+        apply(new UpdateFirmbankingStatusEvent(command.getFirmbankingStatus()));
+        return id;
+    }
+
+    @EventSourcingHandler
+    public void on(UpdateFirmbankingStatusEvent event) {
+
     }
 }

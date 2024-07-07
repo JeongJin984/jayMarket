@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Getter
@@ -55,7 +57,15 @@ public class FirmbankingRequest {
     public record MoneyAmount(BigDecimal moneyAmount) {}
     public record AggregateIdentifier(String aggregateIdentifier) {}
 
+    @Getter
     public enum FirmbankingRequestStatus {
-        REQUEST, COMPLETED, FAIL
+        REQUEST(0), COMPLETED(1), FAIL(2);
+        private final int num;
+        FirmbankingRequestStatus(int num) {
+            this.num = num;
+        }
+        public static FirmbankingRequestStatus findByNum(int num) {
+            return Arrays.stream(FirmbankingRequestStatus.values()).filter(v -> v.num == num).findFirst().orElseThrow(NoSuchElementException::new);
+        }
     }
 }
