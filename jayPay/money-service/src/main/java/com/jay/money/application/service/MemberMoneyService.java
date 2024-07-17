@@ -2,6 +2,8 @@ package com.jay.money.application.service;
 
 import com.jay.money.adaptor.axon.command.MemberMoneyCreatedAxonCommand;
 import com.jay.money.adaptor.axon.command.MemberMoneyIncreasedAxonCommand;
+import com.jay.money.adaptor.axon.command.RechargingRequestCreateCommand;
+import com.jay.money.adaptor.axon.event.RechargingRequestCreatedEvent;
 import com.jay.money.adaptor.out.persistence.MemberMoneyEntity;
 import com.jay.money.adaptor.out.persistence.MemberMoneyWebRequestEntity;
 import com.jay.money.application.port.in.ChargeMoneyCommand;
@@ -58,24 +60,42 @@ public class MemberMoneyService implements ChargeMoneyUseCase, CreateMemberMoney
     @Override
     public void chargeMemberMoneyRequestByEvent(ChargeMoneyCommand command) {
         MemberMoneyEntity memberMoney = getMemberMoneyPort.getMemberMoney(new MemberMoney.MembershipId(command.getTargetMembershipId()));
+        String memberMoneyAggregateIdentifier = memberMoney.getAggregateIdentifier();
 
         commandGateway.send(
-                MemberMoneyIncreasedAxonCommand.builder()
-                        .aggregateIdentifier(memberMoney.getAggregateIdentifier())
-                        .membershipId(command.getTargetMembershipId())
-                        .amount(command.getAmount())
-                        .build()
-        ).whenComplete((aggregateId, error) -> {
-            if (error != null) {
-                log.error("error", error);
-                throw new RuntimeException(error);
-            } else {
-                chargeMemberMoneyPort.chargeMoney(
-                        new MemberMoney.MembershipId(command.getTargetMembershipId()),
+                new RechargingRequestCreateCommand(
+                        memberMoneyAggregateIdentifier,
+                        UUID.randomUUID().toString(),
+                        command.getTargetMembershipId(),
                         command.getAmount()
-                );
+                )
+        ).whenComplete((result, error) -> {
+            if (error != null) {
+                log.error("Error occurred while recharging request", error);
+            } else {
+
             }
         });
+
+//        //No Saga
+//
+//        commandGateway.send(
+//                MemberMoneyIncreasedAxonCommand.builder()
+//                        .aggregateIdentifier(memberMoney.getAggregateIdentifier())
+//                        .membershipId(command.getTargetMembershipId())
+//                        .amount(command.getAmount())
+//                        .build()
+//        ).whenComplete((aggregateId, error) -> {
+//            if (error != null) {
+//                log.error("error", error);
+//                throw new RuntimeException(error);
+//            } else {
+//                chargeMemberMoneyPort.chargeMoney(
+//                        new MemberMoney.MembershipId(command.getTargetMembershipId()),
+//                        command.getAmount()
+//                );
+//            }
+//        });
     }
 
     @Override

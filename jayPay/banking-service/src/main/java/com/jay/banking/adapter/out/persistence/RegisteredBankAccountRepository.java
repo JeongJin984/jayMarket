@@ -7,5 +7,6 @@ import java.util.Optional;
 
 @Repository
 public interface RegisteredBankAccountRepository extends JpaRepository<RegisteredBankAccountEntity, Long> {
-    public Optional<RegisteredBankAccountEntity> save(String bankAccountNumber);
+    Optional<RegisteredBankAccountEntity> save(String bankAccountNumber);
+    Optional<RegisteredBankAccountEntity> findByMembershipId(String membershipId);
 }

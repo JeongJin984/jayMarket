@@ -1,15 +1,19 @@
 package com.jay.banking.adapter.out.persistence;
 
+import com.jay.banking.application.port.in.GetRegisteredBankAccountCommand;
+import com.jay.banking.application.port.out.GetRegisteredBankAccountPort;
 import com.jay.banking.application.port.out.RegisterBankAccountPort;
 import com.jay.banking.domain.RegisteredBankAccount;
 import com.jay.common.PersistenceAdapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.NoSuchElementException;
+
 @Slf4j
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class RegisteredBankAccountPersistenceAdaptor implements RegisterBankAccountPort {
+public class RegisteredBankAccountPersistenceAdaptor implements RegisterBankAccountPort, GetRegisteredBankAccountPort {
 
     private final RegisteredBankAccountRepository registeredBankAccountRepository;
 
@@ -21,5 +25,12 @@ public class RegisteredBankAccountPersistenceAdaptor implements RegisterBankAcco
                 bankAccountNumber.bankAccountNumber(),
                 linkedStatusIsValid.linkedStatusIsValid()
         )) ;
+    }
+
+    @Override
+    public RegisteredBankAccountEntity getRegisteredBankAccount(GetRegisteredBankAccountCommand command) {
+        return registeredBankAccountRepository.findByMembershipId(command.getMembershipId()).orElseThrow(
+                () -> new NoSuchElementException("No Such bank account " + command.getMembershipId())
+        );
     }
 }

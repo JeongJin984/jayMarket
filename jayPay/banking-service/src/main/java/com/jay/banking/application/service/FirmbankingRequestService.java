@@ -112,6 +112,6 @@ public class FirmbankingRequestService implements FirmbankingRequestUseCase, Upd
                 FirmbankingRequestEntity firmbankingRequest = firmbankingRequestPersistencePort.getFirmbankingRequest(new FirmbankingRequest.AggregateIdentifier(command.getFirmbankingAggregateId()));
                 firmbankingRequest.setFirmbankingRequestStatus(FirmbankingRequest.FirmbankingRequestStatus.findByNum(command.getFirmbankingStatus()));
             }
-        })
+        });
     }
 }

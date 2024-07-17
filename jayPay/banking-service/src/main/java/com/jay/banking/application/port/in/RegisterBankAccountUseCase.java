@@ -6,5 +6,5 @@ import com.jay.common.UseCase;
 @UseCase
 public interface RegisterBankAccountUseCase {
     RegisteredBankAccount registerBankAccount(RegisterBankAccountCommand command);
-
+    void registerBankAccountByEvent(RegisterBankAccountCommand command);
 }
